@@ -15,6 +15,7 @@ export function SignIn() {
 
       <Input
         placeholder="E-mail"
+        
       />
       <Input
         placeholder="Senha"
