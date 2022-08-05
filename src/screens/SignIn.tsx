@@ -1,9 +1,9 @@
-import { Text, View } from "react-native";
+import { VStack } from 'native-base';
 
 export function SignIn() {
   return (
-    <View>
-      <Text>Olá, Rodrigo.</Text>
-    </View>
+    <VStack>
+      
+    </VStack>
   );
 };
