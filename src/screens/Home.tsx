@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HStack, IconButton, VStack, useTheme, Text, Heading } from 'native-base';
+import { HStack, IconButton, VStack, useTheme, Text, Heading, FlatList } from 'native-base';
 import { SignOut } from 'phosphor-react-native';
 
 import Logo from '../assets/logo_secondary.svg';
@@ -8,6 +8,12 @@ import { Filter } from '../components/Filter';
 
 export function Home() {
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
+  const [orders, setOrders] = useState([{
+    id: '1234',
+    patrimony: '130948135',
+    when: '18/07/2022 ás 10:00',
+    status: 'open'
+  }]);
 
   const { colors } = useTheme();
 
@@ -57,6 +63,12 @@ export function Home() {
             isActive={statusSelected === 'closed'}
           />
         </HStack>
+
+        <FlatList
+          data={orders}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => <Text color="white">{item.status}</Text>}
+        />
       </VStack>
     </VStack>
   );
