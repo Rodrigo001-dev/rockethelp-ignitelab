@@ -5,11 +5,11 @@ import { SignOut } from 'phosphor-react-native';
 import Logo from '../assets/logo_secondary.svg';
 
 import { Filter } from '../components/Filter';
-import { Order } from '../components/Order';
+import { Order, OrderProps } from '../components/Order';
 
 export function Home() {
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
-  const [orders, setOrders] = useState([{
+  const [orders, setOrders] = useState<OrderProps[]>([{
     id: '1234',
     patrimony: '130948135',
     when: '18/07/2022 ás 10:00',
@@ -68,7 +68,7 @@ export function Home() {
         <FlatList
           data={orders}
           keyExtractor={item => item.id}
-          renderItem={({ item }) => <Text color="white">{item.status}</Text>}
+          renderItem={({ item }) => <Order data={item} />}
         />
       </VStack>
     </VStack>
