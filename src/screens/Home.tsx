@@ -1,20 +1,68 @@
 import { useState } from 'react';
-import { HStack, IconButton, VStack, useTheme, Text, Heading, FlatList } from 'native-base';
-import { SignOut } from 'phosphor-react-native';
+import { 
+  HStack, 
+  IconButton, 
+  VStack, 
+  useTheme, 
+  Text, 
+  Heading, 
+  FlatList, 
+  Center 
+} from 'native-base';
+import { SignOut, ChatTeardropText } from 'phosphor-react-native';
 
 import Logo from '../assets/logo_secondary.svg';
 
 import { Filter } from '../components/Filter';
+import { Button } from '../components/Button';
 import { Order, OrderProps } from '../components/Order';
 
 export function Home() {
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
-  const [orders, setOrders] = useState<OrderProps[]>([{
-    id: '1234',
-    patrimony: '130948135',
-    when: '18/07/2022 ás 10:00',
-    status: 'open'
-  }]);
+  const [orders, setOrders] = useState<OrderProps[]>([
+    {
+      id: '1234',
+      patrimony: '130948135',
+      when: '18/07/2022 ás 10:00',
+      status: 'open'
+    },
+    {
+      id: '1234',
+      patrimony: '130948135',
+      when: '18/07/2022 ás 10:00',
+      status: 'open'
+    },{
+      id: '1234',
+      patrimony: '130948135',
+      when: '18/07/2022 ás 10:00',
+      status: 'open'
+    },{
+      id: '1234',
+      patrimony: '130948135',
+      when: '18/07/2022 ás 10:00',
+      status: 'open'
+    },{
+      id: '1234',
+      patrimony: '130948135',
+      when: '18/07/2022 ás 10:00',
+      status: 'open'
+    },{
+      id: '1234',
+      patrimony: '130948135',
+      when: '18/07/2022 ás 10:00',
+      status: 'open'
+    },{
+      id: '1234',
+      patrimony: '130948135',
+      when: '18/07/2022 ás 10:00',
+      status: 'open'
+    },{
+      id: '1234',
+      patrimony: '130948135',
+      when: '18/07/2022 ás 10:00',
+      status: 'open'
+    },
+  ]);
 
   const { colors } = useTheme();
 
@@ -69,7 +117,24 @@ export function Home() {
           data={orders}
           keyExtractor={item => item.id}
           renderItem={({ item }) => <Order data={item} />}
+          // showsVerticalScrollIndicator={false} é para desabilitar o barra de
+          // rolagem que fica no canto direito na vertical
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          // o ListEmptyComponent vai renderizar alguma coisa quando a lista
+          // estiver vazia
+          ListEmptyComponent={() => (
+            <Center>
+              <ChatTeardropText color={colors.gray[300]} size={40} />
+              <Text color="gray.300" fontSize="xl" mt={6} textAlign="center">
+                Você ainda não possui {'\n'}
+                solicitações {statusSelected === 'open' ? 'em andamento' : 'finalizados'}
+              </Text>
+            </Center>
+          )}
         />
+
+        <Button title="Nova solicitação" />
       </VStack>
     </VStack>
   );
