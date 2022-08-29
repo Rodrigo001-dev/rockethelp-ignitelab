@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { 
   HStack, 
   IconButton, 
@@ -19,52 +20,14 @@ import { Order, OrderProps } from '../components/Order';
 
 export function Home() {
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
-  const [orders, setOrders] = useState<OrderProps[]>([
-    {
-      id: '1234',
-      patrimony: '130948135',
-      when: '18/07/2022 ás 10:00',
-      status: 'open'
-    },
-    {
-      id: '1234',
-      patrimony: '130948135',
-      when: '18/07/2022 ás 10:00',
-      status: 'open'
-    },{
-      id: '1234',
-      patrimony: '130948135',
-      when: '18/07/2022 ás 10:00',
-      status: 'open'
-    },{
-      id: '1234',
-      patrimony: '130948135',
-      when: '18/07/2022 ás 10:00',
-      status: 'open'
-    },{
-      id: '1234',
-      patrimony: '130948135',
-      when: '18/07/2022 ás 10:00',
-      status: 'open'
-    },{
-      id: '1234',
-      patrimony: '130948135',
-      when: '18/07/2022 ás 10:00',
-      status: 'open'
-    },{
-      id: '1234',
-      patrimony: '130948135',
-      when: '18/07/2022 ás 10:00',
-      status: 'open'
-    },{
-      id: '1234',
-      patrimony: '130948135',
-      when: '18/07/2022 ás 10:00',
-      status: 'open'
-    },
-  ]);
+  const [orders, setOrders] = useState<OrderProps[]>([]);
 
+  const navigation = useNavigation();
   const { colors } = useTheme();
+
+  function handleNewOrder() {
+    navigation.navigate('new');
+  };
 
   return (
     <VStack flex={1} pb={6} bg="gray.700">
@@ -134,7 +97,7 @@ export function Home() {
           )}
         />
 
-        <Button title="Nova solicitação" />
+        <Button title="Nova solicitação" onPress={handleNewOrder} />
       </VStack>
     </VStack>
   );
