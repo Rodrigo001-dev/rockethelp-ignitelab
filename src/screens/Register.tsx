@@ -51,6 +51,7 @@ export function Register() {
       <Input 
         placeholder="Número do partimônio"
         mt={4}
+        onChangeText={setPatrimony}
       />
 
       <Input 
@@ -59,11 +60,14 @@ export function Register() {
         mt={5}
         multiline
         textAlignVertical="top"
+        onChangeText={setDescription}
       />
 
       <Button 
         title="Cadastrar"
         mt={5}
+        isLoading={isLoading}
+        onPress={handleNewOrderRegister}
       />
     </VStack>
   );

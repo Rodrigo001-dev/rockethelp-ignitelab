@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { 
   HStack, 
@@ -21,6 +22,7 @@ import { Button } from '../components/Button';
 import { Order, OrderProps } from '../components/Order';
 
 export function Home() {
+  const [loading, setIsLoading] = useState(true);
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
   const [orders, setOrders] = useState<OrderProps[]>([
     {
@@ -51,6 +53,30 @@ export function Home() {
       })
     ;
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    const subscriber = firestore()
+    // buscar pelas solicitações na collection orders
+    .collection('orders')
+    // fazendo um filtro onde o status seja igual ao status que está selecionado
+    .where('status', '==', statusSelected)
+    // o método onSnapshot vai atualizar os dados em tempo real
+    .onSnapshot(snapshot => {
+      const data = snapshot.docs.map(doc => {
+        const { patrimony, description, status, created_at } = doc.data();
+
+        return {
+          id: doc.id,
+          patrimony,
+          description,
+          status,
+          when: 
+        }
+      })
+    })
+  }, []);
 
   return (
     <VStack flex={1} pb={6} bg="gray.700">
