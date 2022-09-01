@@ -15,23 +15,19 @@ import {
 } from 'native-base';
 import { SignOut, ChatTeardropText } from 'phosphor-react-native';
 
+import { dateFormat } from '../utils/firestoreDateFormat';
+
 import Logo from '../assets/logo_secondary.svg';
 
 import { Filter } from '../components/Filter';
 import { Button } from '../components/Button';
+import { Loading } from '../components/Loading';
 import { Order, OrderProps } from '../components/Order';
 
 export function Home() {
-  const [loading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open');
-  const [orders, setOrders] = useState<OrderProps[]>([
-    {
-      id: '123',
-      patrimony: '123456',
-      when: '18/07/2022',
-      status: 'open'
-    }
-  ]);
+  const [orders, setOrders] = useState<OrderProps[]>([]);
 
   const navigation = useNavigation();
   const { colors } = useTheme();
@@ -64,19 +60,26 @@ export function Home() {
     .where('status', '==', statusSelected)
     // o método onSnapshot vai atualizar os dados em tempo real
     .onSnapshot(snapshot => {
+      // percorrendo cada um dos documentos retornados basiado no filtro na collection
       const data = snapshot.docs.map(doc => {
         const { patrimony, description, status, created_at } = doc.data();
 
+        // formatando os dados de cada documento(doc)
         return {
           id: doc.id,
           patrimony,
           description,
           status,
-          when: 
+          when: dateFormat(created_at)
         }
-      })
-    })
-  }, []);
+      });
+
+      setOrders(data);
+      setIsLoading(false);
+    });
+
+    return subscriber;
+  }, [statusSelected]);
 
   return (
     <VStack flex={1} pb={6} bg="gray.700">
@@ -126,26 +129,29 @@ export function Home() {
           />
         </HStack>
 
-        <FlatList
-          data={orders}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => <Order data={item} onPress={() => handleOpenDetails(item.id)} />}
-          // showsVerticalScrollIndicator={false} é para desabilitar o barra de
-          // rolagem que fica no canto direito na vertical
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 100 }}
-          // o ListEmptyComponent vai renderizar alguma coisa quando a lista
-          // estiver vazia
-          ListEmptyComponent={() => (
-            <Center>
-              <ChatTeardropText color={colors.gray[300]} size={40} />
-              <Text color="gray.300" fontSize="xl" mt={6} textAlign="center">
-                Você ainda não possui {'\n'}
-                solicitações {statusSelected === 'open' ? 'em andamento' : 'finalizados'}
-              </Text>
-            </Center>
-          )}
-        />
+        {
+          isLoading ? <Loading /> :
+          <FlatList
+            data={orders}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => <Order data={item} onPress={() => handleOpenDetails(item.id)} />}
+            // showsVerticalScrollIndicator={false} é para desabilitar o barra de
+            // rolagem que fica no canto direito na vertical
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 100 }}
+            // o ListEmptyComponent vai renderizar alguma coisa quando a lista
+            // estiver vazia
+            ListEmptyComponent={() => (
+              <Center>
+                <ChatTeardropText color={colors.gray[300]} size={40} />
+                <Text color="gray.300" fontSize="xl" mt={6} textAlign="center">
+                  Você ainda não possui {'\n'}
+                  solicitações {statusSelected === 'open' ? 'em andamento' : 'finalizados'}
+                </Text>
+              </Center>
+            )}
+          />
+        }
 
         <Button title="Nova solicitação" onPress={handleNewOrder} />
       </VStack>
